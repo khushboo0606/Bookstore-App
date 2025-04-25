@@ -437,3 +437,4 @@ C:\Users\35389\CleanBookstore\Bookstore\obj\Debug\net8.0\refint\Bookstore.dll
 C:\Users\35389\CleanBookstore\Bookstore\obj\Debug\net8.0\Bookstore.pdb
 C:\Users\35389\CleanBookstore\Bookstore\obj\Debug\net8.0\Bookstore.genruntimeconfig.cache
 C:\Users\35389\CleanBookstore\Bookstore\obj\Debug\net8.0\ref\Bookstore.dll
+C:\Users\35389\CleanBookstore\Bookstore\obj\Debug\net8.0\Bookstore.sourcelink.json
