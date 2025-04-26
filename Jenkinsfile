@@ -2,42 +2,43 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'bookstorewebapp'
-        DOCKER_CONTAINER = 'bookstore-container'
+        DOTNET_VERSION = '8.0'
     }
 
     stages {
         stage('Clone Repo') {
             steps {
-                git url: 'https://github.com/khushboo0606/Bookstore-App.git'
+                git branch: 'main', url: 'https://github.com/khushboo0606/Bookstore-App.git'
+            }
+        }
+
+        stage('Restore Dependencies') {
+            steps {
+                bat 'dotnet restore'
             }
         }
 
         stage('Build Project') {
             steps {
-                sh 'dotnet build'
+                bat 'dotnet build --configuration Release'
             }
         }
 
         stage('Publish Project') {
             steps {
-                sh 'dotnet publish -c Release -o out'
+                bat 'dotnet publish -c Release -o publish'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                bat 'docker build -t bookstore-app .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                script {
-                    sh 'docker stop $DOCKER_CONTAINER || true'
-                    sh 'docker rm $DOCKER_CONTAINER || true'
-                    sh 'docker run -d -p 5000:80 --name $DOCKER_CONTAINER $DOCKER_IMAGE'
-                }
+                bat 'docker run -d -p 5000:80 --name bookstore-container bookstore-app'
             }
         }
     }
