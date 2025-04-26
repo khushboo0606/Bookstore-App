@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         DOTNET_VERSION = '8.0'
+        DOCKER_IMAGE = 'bookstore-app'
+        DOCKER_CONTAINER = 'bookstore-container'
     }
 
     stages {
@@ -30,22 +32,33 @@ pipeline {
             }
         }
 
+        stage('Docker Cleanup') {
+            steps {
+                script {
+                    bat """
+                    docker stop %DOCKER_CONTAINER% || echo "No running container to stop"
+                    docker rm %DOCKER_CONTAINER% || echo "No container to remove"
+                    """
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
-                bat 'docker build -t bookstore-app .'
+                bat 'docker build -t %DOCKER_IMAGE% .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                bat 'docker run -d -p 5000:80 --name bookstore-container bookstore-app'
+                bat 'docker run -d -p 5000:80 --name %DOCKER_CONTAINER% %DOCKER_IMAGE%'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline finished!'
+            echo '✅ CI/CD Pipeline Finished!'
         }
     }
 }
